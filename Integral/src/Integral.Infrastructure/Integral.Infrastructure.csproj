@@ -1,0 +1,30 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <LangVersion>8.0</LangVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Persistence\Migrations\20200322173428_AddProducts.cs" />
+    <Compile Remove="Persistence\Migrations\20200322173428_AddProducts.Designer.cs" />
+    <Compile Remove="Persistence\Migrations\20200322180007_AddProducts.cs" />
+    <Compile Remove="Persistence\Migrations\20200322180007_AddProducts.Designer.cs" />
+    <Compile Remove="Persistence\Migrations\20200322180210_AddProductTables.cs" />
+    <Compile Remove="Persistence\Migrations\20200322180210_AddProductTables.Designer.cs" />
+    <Compile Remove="Persistence\Migrations\20200402203531_RemoveIdentityFromProducts.cs" />
+    <Compile Remove="Persistence\Migrations\20200402203531_RemoveIdentityFromProducts.Designer.cs" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.4" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="3.1.4" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.4" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Integral.Application\Integral.Application.csproj" />
+  </ItemGroup>
+
+</Project>

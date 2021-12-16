@@ -1,0 +1,1 @@
+dotnet publish -c Release --self-contained -r win-x86 -o ./publish /p:EnvironmentName=Staging .\src\Integral.Web\Integral.Web.csproj

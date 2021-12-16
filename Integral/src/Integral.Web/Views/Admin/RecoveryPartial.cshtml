@@ -1,0 +1,27 @@
+﻿@using Integral.Application.Storage.Commands
+
+@model ApplyBackupCommand
+
+<form asp-action="@nameof(AdminController.ApplyBackup)" enctype="multipart/form-data">
+    <div class="row">
+        <div class="col-12">
+            <div class="md-form">
+                <div class="file-field">
+                    <div class="btn btn-white btn-rounded mr-md-3 z-depth-1a btn-sm justify-content-start">
+                        <i class="fas fa-cloud-upload-alt blue-text"></i>
+                        <input asp-for="File" accept=".zip">
+                    </div>
+                    <div class="file-path-wrapper">
+                        <input class="file-path" type="text" readonly="readonly" placeholder="Архив восстановления">
+                    </div>
+                    <span asp-validation-for="File" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="my-3 d-flex justify-content-center">
+        <button type="submit" class="btn btn-white btn-rounded mr-md-3 z-depth-1a">
+            <i class="fas fa-check green-text"></i>
+        </button>
+    </div>
+</form>

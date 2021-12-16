@@ -1,0 +1,45 @@
+[
+	{
+		"outputFileName": "wwwroot/assets/css/site-bundle.css",
+		"inputFiles": [
+			"static/lib/twitter-bootstrap/css/bootstrap.min.css",
+			"wwwroot/assets/lib/mdb-pro/css/mdb.min.css",
+			"static/lib/semantic-ui/components/flag.min.css",
+			"static/css/site.css"
+		],
+		"minify": {
+			"enabled": true
+		}
+	},
+	{
+		"outputFileName": "wwwroot/assets/js/site-bundle.js",
+		"inputFiles": [
+			"static/lib/jquery/jquery.min.js",
+			"static/lib/jquery-validate/jquery.validate.min.js",
+			"static/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js",
+			"static/lib/twitter-bootstrap/js/bootstrap.bundle.min.js",
+			"wwwroot/assets/lib/mdb-pro/js/mdb.min.js",
+			"static/lib/scrollify/jquery.scrollify.min.js",
+			"static/lib/slick-carousel/slick.min.js"
+		],
+		"minify": {
+			"enabled": true,
+			"renameLocals": true
+		}
+	},
+	{
+		"outputFileName": "wwwroot/assets/js/admin-bundle.js",
+		"inputFiles": [
+			"static/lib/jquery/jquery.min.js",
+			"static/lib/jquery-validate/jquery.validate.min.js",
+			"static/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js",
+			"static/lib/twitter-bootstrap/js/bootstrap.bundle.min.js",
+			"wwwroot/assets/lib/mdb-pro/js/mdb.min.js",
+			"static/js/admin.js"
+		],
+		"minify": {
+			"enabled": true,
+			"renameLocals": true
+		}
+	}
+]

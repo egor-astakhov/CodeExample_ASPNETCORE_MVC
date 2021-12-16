@@ -1,0 +1,37 @@
+﻿
+@{
+    ViewData["Title"] = "Персональные настройки";
+    Layout = "_AdminLayout";
+}
+
+    <div class="container-fluid">
+        <div class="d-flex p-2 justify-content-center">
+            <h2 class="h2-responsive d-flex">Изменение пароля</h2>
+        </div>
+
+        <div class="row justify-content-center">
+            <div class="col-8 col-sm-10 col-md-8 col-lg-8 col-xl-8">
+                <div class="row">
+                    <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                        <div class="md-form">
+                            <input type="text" id="previousPassword" class="form-control">
+                            <label for="previousPassword">Предыдущий пароль</label>
+                            <span class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                        <div class="md-form">
+                            <input type="text" id="newPassword" class="form-control">
+                            <label for="newPassword">Новый пароль</label>
+                            <span class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row my-3 d-flex justify-content-center">
+            <button type="submit" class="btn btn-white btn-rounded mr-md-3 z-depth-1a"><i class="fas fa-check green-text"></i></button>
+        </div>
+    </div>
+

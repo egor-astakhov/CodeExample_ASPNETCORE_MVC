@@ -1,0 +1,65 @@
+﻿@model LoginViewModel
+
+<style>
+    .intro-2 {
+        background: url("/assets/img/login-background.jpg")no-repeat center center;
+        background-size: cover;
+    }
+
+    .navbar:not(.top-nav-collapse) {
+        background: transparent !important;
+    }
+
+    .card {
+        background-color: rgba(229, 228, 255, 0.2);
+    }
+
+
+    .md-form input[type=text]:focus:not([readonly]),
+    .md-form input[type=password]:focus:not([readonly]) {
+        border-bottom: 1px solid #8EDEF8;
+        box-shadow: 0 1px 0 0 #8EDEF8;
+    }
+
+        .md-form input[type=text]:focus:not([readonly]) + label,
+        .md-form input[type=password]:focus:not([readonly]) + label {
+            color: #8EDEF8;
+        }
+</style>
+
+<header>
+    <section class="view intro-2">
+        <div class="mask rgba-white-strong h-100 d-flex justify-content-center align-items-center">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xl-5 col-lg-6 col-md-10 col-sm-12 mx-auto mt-lg-5">
+                        <div class="card card-h-unset wow fadeIn" data-wow-delay="0.3s">
+                            <div class="card-body">
+                                <form method="post">
+                                    <div class="form-header blue-gradient">
+                                        <h3><i class="fas fa-user mt-2 mb-2"></i> Вход:</h3>
+                                    </div>
+                                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                    <div class="md-form">
+                                        <input asp-for="UserName" class="form-control">
+                                        <label asp-for="UserName">Логин</label>
+                                        <span asp-validation-for="UserName" class="text-danger"></span>
+                                    </div>
+                                    <div class="md-form">
+                                        <input type="password" asp-for="Password" class="form-control">
+                                        <label asp-for="Password">Пароль</label>
+                                        <span asp-validation-for="Password" class="text-danger"></span>
+                                    </div>
+                                    <div class="text-center">
+                                        <a asp-controller="Home" asp-action="@nameof(HomeController.Index)" class="btn peach-gradient btn-lg">Назад</a>
+                                        <button type="submit" class="btn blue-gradient btn-lg">Войти</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</header>

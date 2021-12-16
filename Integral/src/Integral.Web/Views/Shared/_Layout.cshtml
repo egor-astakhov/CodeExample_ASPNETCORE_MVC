@@ -1,0 +1,38 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="ru" dir="ltr" class="full-height">
+<head>
+    <title>@ViewData["Title"]</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="description" content="ООО Интеграл. Навигационные решения для любых задач. Разрабатываем и производим бесплатформенные инерциальные навигационные системы и комплекты оборудования на их основе.">
+
+    <!-- opengraph-settings-->
+    <meta property="og:title" content="ООО Интеграл" />
+    <meta property="og:description" content="Навигационные решения для любых задач" />
+    <meta property="og:image" content="https://www.bloombergtv.bg/media/files/image/567/567227cd6ba6e3bf8df37976a75cc4c6.jpeg" />
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="https://integral-group.pro/" />
+
+    <link rel="icon" type="image/png" href="~/favicon.png">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Exo+2&display=swap&subset=cyrillic">
+
+    <link rel="stylesheet" href="~/assets/css/site-bundle.min.css" asp-append-version="true" />
+</head>
+
+<body>
+    @RenderBody()
+    <script src="~/assets/js/site-bundle.min.js" asp-append-version="true"></script>
+    <script>
+        $(function () {
+            new WOW().init();
+        });
+    </script>
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

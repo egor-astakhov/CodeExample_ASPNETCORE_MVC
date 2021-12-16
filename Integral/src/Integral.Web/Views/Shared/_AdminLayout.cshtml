@@ -1,0 +1,174 @@
+﻿@using Integral.Application.Common.Persistence
+@inject IDeferredDbContext DbContext
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="ru" dir="ltr" class="full-height">
+<head>
+    <title>@ViewData["Title"]</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="description" content="ООО Интеграл. Навигационные решения для любых задач. Разрабатываем и производим бесплатформенные инерциальные навигационные системы и комплекты оборудования на их основе.">
+
+    <link rel="icon" type="image/png" href="~/favicon.png">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700&display=swap&subset=cyrillic">
+
+    <environment include="Development">
+        <link rel="stylesheet" href="~/assets/css/site-bundle.css" asp-append-version="true" />
+    </environment>
+    <environment exclude="Development">
+        <link rel="stylesheet" href="~/assets/css/site-bundle.min.css" asp-append-version="true" />
+    </environment>
+</head>
+<body class="fixed-sn black-skin">
+    <div class="admin-header">
+        <div id="slide-out" class="side-nav sn-bg-4 fixed">
+            <ul class="custom-scrollbar">
+                <li>
+                    <div class="logo-wrapper waves-light">
+                    </div>
+                </li>
+                <li>
+                    <ul class="collapsible collapsible-accordion">
+                        <li>
+                            <a asp-controller="Home" asp-action="@nameof(HomeController.Index)" class="collapsible-header waves-effect">
+                                <i class="far fa-hand-point-left"></i> Перейти к сайту
+                            </a>
+                        </li>
+                        <li>
+                            <a class="collapsible-header waves-effect arrow-r @SetActive(SITE_EDITING_SECTION)">
+                                <i class="fas fa-edit"></i>Редактирование
+                                сайта<i class="fas fa-angle-down rotate-icon"></i>
+                            </a>
+                            <div class="collapsible-body">
+                                <ul class="list-unstyled">
+                                    <li>
+                                        <a asp-controller="Admin" asp-action="@nameof(AdminController.CommonSettings)"
+                                           class="waves-effect @SetActive(nameof(AdminController.CommonSettings))">
+                                            Общие настройки
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a asp-controller="Admin" asp-action="@nameof(AdminController.LandingCarousel)"
+                                           class="waves-effect @SetActive(nameof(AdminController.LandingCarousel))">
+                                            Слайдер
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a asp-controller="Admin" asp-action="@nameof(AdminController.Products)"
+                                           class="waves-effect @SetActive(nameof(AdminController.Products))">
+                                            Редактор продуктов
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a asp-controller="Admin" asp-action="@nameof(AdminController.EmailServiceSettings)"
+                                           class="waves-effect @SetActive(nameof(AdminController.EmailServiceSettings))">
+                                            Настройки почты
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li class="@(DbContext.DeferredChanges.Any() ? "" : "disabled")">
+                            <a asp-controller="Admin" asp-action="@nameof(AdminController.DeferredChanges)"
+                               class="waves-effect @SetActive(nameof(AdminController.DeferredChanges))">
+                                <i class="fas fa-exchange-alt"></i>Несохраненные изменения
+                            </a>
+                        </li>
+                        <li>
+                            <a asp-controller="Admin" asp-action="@nameof(AdminController.Backups)"
+                               class="waves-effect @SetActive(nameof(AdminController.Backups))">
+                                <i class="fas fa-database"></i> Резервное копирование
+                            </a>
+                        </li>
+                        <li>
+                            <a asp-controller="Admin" asp-action="@nameof(AdminController.FAQ)"
+                               class="waves-effect @SetActive(nameof(AdminController.FAQ))">
+                                <i class="fab fa-audible"></i>Справка
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+            <div class="sidenav-bg mask-strong"></div>
+        </div>
+
+        <nav class="navbar fixed-top navbar-toggleable-md navbar-expand-lg scrolling-navbar double-nav account-navbar">
+            <div class="float-left">
+                <a href="#" data-activates="slide-out" class="button-collapse grey-text">
+                    <i class="fas fa-bars"></i>
+                </a>
+            </div>
+            <div class="breadcrumb-dn mr-auto">
+                <p>Интеграл | Панель администратора</p>
+            </div>
+            <ul class="nav navbar-nav nav-flex-icons ml-auto">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown"
+                       aria-haspopup="true" aria-expanded="false">
+                        Аккаунт
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
+                        <form asp-controller="Account" asp-action="@nameof(AccountController.Logout)" method="post">
+                            <button class="dropdown-item" type="submit">Выйти</button>
+                        </form>
+                    </div>
+                </li>
+            </ul>
+        </nav>
+    </div>
+
+    <main>
+        @RenderBody()
+    </main>
+
+    <environment include="Development">
+        <script src="~/assets/js/admin-bundle.js" asp-append-version="true"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="~/assets/js/admin-bundle.min.js" asp-append-version="true"></script>
+    </environment>
+    <script>
+        window.Integral = {};
+        window.Integral.dateFormat = "@CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern.ToLower()";
+        $(function () {
+            new WOW().init();
+            $(".button-collapse").sideNav();
+            $(".datepicker").pickadate({
+                format: Integral.dateFormat
+            });
+            $(".mdb-select").materialSelect();
+        });
+    </script>
+    @RenderSection("Scripts", required: false)
+</body>
+</html>
+
+@functions
+{
+    private const string SITE_EDITING_SECTION = "SiteEditingSection";
+
+    private string SetActive(string link)
+    {
+        string getStatus(bool status) => status ? "active" : "";
+
+        if (link == ViewBag.ActivePage) return getStatus(true);
+
+        switch (ViewBag.ActivePage)
+        {
+            case nameof(AdminController.CommonSettings):
+            case nameof(AdminController.LandingCarousel):
+            case nameof(AdminController.Products):
+            case nameof(AdminController.EmailServiceSettings):
+                return getStatus(link == SITE_EDITING_SECTION);
+        }
+
+        return getStatus(false);
+    }
+}
+

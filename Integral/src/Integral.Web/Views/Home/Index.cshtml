@@ -1,0 +1,561 @@
+﻿@using Integral.Application.Landing.Data
+@using Integral.Application.Notifications.Commands.SendContactUsNotification
+
+@model LandingViewModel
+@inject IApplicationSettingService _applicationSettingService
+
+@{
+    ViewData["Title"] = "ООО \"Интеграл\" - навигационные решения для любых задач";
+
+    var commonSettings = await _applicationSettingService.GetAsync<CommonSettingsDTO>();
+    var carouselSettings = await _applicationSettingService.GetAsync<LandingCarouselSettingsDTO>();
+}
+
+<header class="scroll-magic">
+    <nav class="navbar fixed-top navbar-expand-lg navbar-dark scrolling-navbar">
+        <div class="container">
+            <a class="navbar-brand" href="#" id="back-to-top">
+                <img src="assets/img/icon.png" height="35" class="d-inline-block align-middle"
+                     alt="Интеграл лого"> Интеграл
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent-333"
+                    aria-controls="navbarSupportedContent-333" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent-333">
+                <ul class="navbar-nav smooth-scroll mr-auto ml-3">
+                    <li class="nav-item dropdown desktop-view">
+                        <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" data-toggle="dropdown"
+                           aria-haspopup="true" aria-expanded="false">Продукты</a>
+                        <div class="dropdown-menu dropdown-primary" aria-labelledby="navbarDropdownMenuLink">
+                            @for (var i = 0; i < Model.Products.Count; i++)
+                            {
+                                var product = Model.Products[i];
+                                <a class="dropdown-item" href="#@product.UIID">@product.Name</a>
+                            }
+                        </div>
+                    </li>
+                    <li class="nav-item dropdown mobile-view">
+                        <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink-mobile" data-toggle="dropdown"
+                           aria-haspopup="true" aria-expanded="false">Продукты</a>
+                        <div class="dropdown-menu dropdown-menu-right dropdown-default align-middle" aria-labelledby="navbarDropdownMenuLink-mobile">
+                            @for (var i = 0; i < Model.Products.Count; i++)
+                            {
+                                var product = Model.Products[i];
+                                <a class="dropdown-item" href="#@product.MobileUIID">@product.Name</a>
+                            }
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#contact-us">Контакты</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#send-us-a-mail">Написать нам</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav ml-auto nav-flex-icons">
+                    <li>
+                        <div class="md-form my-0">
+                            <a asp-controller="Account" asp-action="@nameof(AccountController.Login)" class="btn aqua-gradient btn-md my-2 my-sm-0 ml-3" type="button">Личный кабинет</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    @if (carouselSettings.Items.Any())
+    {
+        <div id="landing-carousel" class="carousel slide carousel-fade" data-ride="carousel">
+            <ol class="carousel-indicators">
+                @for (var i = 0; i < carouselSettings.Items.Count(); i++)
+                {
+                    var isFirst = i == 0;
+                    <li data-target="#landing-carousel" data-slide-to="@i" class="@(isFirst ? "active" : "")"></li>
+                }
+            </ol>
+
+            <div class="carousel-inner" role="listbox">
+                @for (var i = 0; i < carouselSettings.Items.Count(); i++)
+                {
+                    var item = carouselSettings.Items.ElementAt(i);
+                    var isFirst = i == 0;
+
+                    <div class="carousel-item @(isFirst ? "active" : "")">
+                        <div class="view">
+                            <video class="video-fluid" autoplay loop muted>
+                                <source src="@item.Path" />
+                            </video>
+                        </div>
+                        <div class="carousel-caption flex-center">
+                            <div class="animated fadeInDown">
+                                <p class="text-intro">@item.Text</p>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+            <a class="carousel-control-prev" href="#landing-carousel" role="button" data-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="sr-only">Предыдущий</span>
+            </a>
+            <a class="carousel-control-next" href="#landing-carousel" role="button" data-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="sr-only">Следующий</span>
+            </a>
+        </div>
+    }
+</header>
+
+<div class="container">
+    <div class="desktop-view">
+
+        @for (var i = 0; i < Model.Products.Count; i++)
+        {
+            var product = Model.Products[i];
+            var isEvenProduct = i % 2 == 0;
+            var textRightClass = isEvenProduct ? "text-right" : "";
+            var titleTextAlign = isEvenProduct ? "text-left" : "text-right";
+            var productImageOrder = isEvenProduct ? "order-1" : "order-2";
+            var productContentOrder = isEvenProduct ? "order-2" : "order-1";
+
+            <div class="inner pt-3 scroll-magic" id="@product.UIID">
+                <div class="row">
+                    <div class="col-12 ">
+                        <h3 class="our-products mt-5 @titleTextAlign">Наши продукты</h3>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <p class="product-name @textRightClass">@product.Name</p>
+                        <p class="product-name-discription @textRightClass">@product.ShortDescription</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-4 @productImageOrder">
+                        <div class="mdb-lightbox-ui"></div>
+                        <div class="mdb-lightbox">
+                            <figure>
+                                <a href="@product.ImagePath" data-size="900x600">
+                                    <img src="@product.ImagePath" class="img-fluid" alt="@product.ImageName">
+                                </a>
+                            </figure>
+                        </div>
+                    </div>
+                    <div class="col-sm-8 @productContentOrder">
+                        <ul class="nav md-pills nav-justified pills-warning mb-4">
+                            <li class="nav-item pl-0">
+                                <a class="nav-link active" data-toggle="tab" href="#@product.UIDescriptionId" role="tab">
+                                    Описание
+                                </a>
+                            </li>
+                            <li class="nav-item pr-0">
+                                <a class="nav-link" data-toggle="tab" href="#@product.UIApplicationAreaId" role="tab">
+                                    Область применения
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" data-toggle="tab" href="#@product.UIFeaturesId" role="tab">
+                                    Особенности
+                                </a>
+                            </li>
+                            <li class="nav-item pr-0">
+                                <a class="nav-link" data-toggle="tab" href="#@product.UISpecificationsId" role="tab">
+                                    Технические характеристики
+                                </a>
+                            </li>
+                            <li class="nav-item pr-0">
+                                <a class="nav-link" data-toggle="tab" href="#@product.UIAttachmentsId" role="tab">
+                                    Материалы для скачивания
+                                </a>
+                            </li>
+                        </ul>
+                        <div class="tab-content card">
+                            <div id="@product.UIDescriptionId" class="tab-pane fade in show active scrollbar scrollbar-warning overflow-scroll" role="tabpanel">
+                                <p>@product.Description</p>
+                            </div>
+                            <div id="@product.UIApplicationAreaId" class="tab-pane fade" role="tabpanel">
+                                <ul>
+                                    @foreach (var item in product.ApplicationAreaList)
+                                    {
+                                        <li>@item</li>
+                                    }
+                                </ul>
+                            </div>
+                            <div id="@product.UIFeaturesId" class="tab-pane fade scrollbar scrollbar-warning overflow-scroll" role="tabpanel">
+                                <ul>
+                                    @foreach (var item in product.FeaturesList)
+                                    {
+                                        <li>@item</li>
+                                    }
+                                </ul>
+                            </div>
+                            <div id="@product.UISpecificationsId" class="tab-pane fade scrollbar scrollbar-warning overflow-scroll horizontal-scroll-disable" role="tabpanel">
+
+                                @for (var j = 0; j < product.Specifications.Count; j++)
+                                {
+                                    var specification = product.Specifications[j];
+                                    <div class="row overflow-hidden">
+                                        <div class="col-6">
+                                            @specification.Name
+                                        </div>
+                                        <div class="col-6">
+                                            @specification.Value
+                                        </div>
+                                    </div>
+                                    <hr />
+                                }
+
+                            </div>
+                            <div id="@product.UIAttachmentsId" class="tab-pane fade" role="tabpanel">
+                                @for (var k = 0; k < product.Attachments.Count; k++)
+                                {
+                                    var attachment = product.Attachments[k];
+                                    <div class="row">
+                                        <div class="col-2 text-center">
+                                            <a asp-action="@nameof(HomeController.ProductAttachment)"
+                                               asp-route-id="@attachment.Id" target="_blank">
+                                                <div class="icon icon-@attachment.FileExtension">
+                                                    <i title="@attachment.FileExtension"></i>
+                                                </div>
+                                            </a>
+                                        </div>
+                                        <div class="col-2 text-center">
+                                            @attachment.FileVersion
+                                        </div>
+                                        <div class="col-2 text-center">
+                                            @attachment.FileDate.ToShortDateString()
+                                        </div>
+                                        <div class="col-6 text-center">
+                                            @attachment.Name
+                                        </div>
+                                    </div>
+                                    <hr />
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+    <div class="mobile-view">
+        @for (var i = 0; i < Model.Products.Count; i++)
+        {
+            var product = Model.Products[i];
+
+            <div id="@product.MobileUIID" class="inner pt-2 scroll-magic">
+                <div id="@product.MobileCarouselId" class="carousel slide carousel-multi-item">
+                    <ol class="carousel-indicators">
+                        @for (var j = 0; j < 5; j++)
+                        {
+                            <li class="@(j == 0 ? "active" : "")"
+                                data-target="#@product.MobileCarouselId" data-slide-to="@j"></li>
+                        }
+                    </ol>
+                    <div class="carousel-inner" role="listbox">
+                        <div class="row text-center">
+                            <div class="col">
+                                <h3>@product.Name</h3>
+                            </div>
+                        </div>
+                        <div class="carousel-item active">
+                            <div class="col-md-auto">
+                                <div class="card mb-2">
+                                    <img class="card-img-top mx-auto mt-2" src="@product.ImagePath" alt="@product.ImageName">
+                                    <p class="card-text p-3 scrollbar scrollbar-warning overflow-scroll">
+                                        @product.Description
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="carousel-item">
+                            <div class="col-md-auto">
+                                <div class="card mb-2">
+                                    <div class="card-body">
+                                        <h4 class="card-title">Область применения</h4>
+                                        <ul>
+                                            @foreach (var item in product.ApplicationAreaList)
+                                            {
+                                                <li>@item</li>
+                                            }
+                                        </ul>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-12 text-center pb-2">
+                                            <a data-target="#@product.MobileCarouselId" data-slide-to="4" href="#">Больше информации</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="carousel-item">
+                            <div class="col-md-auto">
+                                <div class="card mb-2">
+                                    <div class="card-body scrollbar scrollbar-warning overflow-scroll">
+                                        <h4 class="card-title">Особенности</h4>
+                                        <p class="card-text">
+                                            <ul>
+                                                @foreach (var item in product.FeaturesList)
+                                                {
+                                                    <li>@item</li>
+                                                }
+                                            </ul>
+                                        </p>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-12 text-center pb-2">
+                                            <a data-target="#@product.MobileCarouselId" data-slide-to="4" href="#">Больше информации</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="carousel-item">
+                            <div class="col-md-auto">
+                                <div class="card mb-2">
+                                    <div class="card-body">
+                                        <h4 class="card-title">Технические характеристики</h4>
+
+                                        @for (var j = 0; j < product.Specifications.Count; j++)
+                                        {
+                                            var specification = product.Specifications[j];
+                                            <div class="row overflow-hidden">
+                                                <div class="col-6">
+                                                    @specification.Name
+                                                </div>
+                                                <div class="col-6">
+                                                    @specification.Value
+                                                </div>
+                                            </div>
+                                            <hr />
+                                        }
+
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-12 text-center pb-2">
+                                            <a data-target="#@product.MobileCarouselId" data-slide-to="4" href="#">Больше информации</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="carousel-item">
+                            <div class="col-md-auto">
+                                <div class="card mb-2">
+                                    <div class="card-body">
+                                        <h4 class="card-title">Материалы для скачивания</h4>
+                                        @for (var k = 0; k < product.Attachments.Count; k++)
+                                        {
+                                            var attachment = product.Attachments[k];
+                                            <div class="row text-break">
+                                                <div class="col-12 text-center">
+                                                    <a asp-action="@nameof(HomeController.ProductAttachment)"
+                                                       asp-route-id="@attachment.Id" target="_blank">
+                                                        <div class="icon icon-@attachment.FileExtension">
+                                                            <i title="@attachment.FileExtension"></i>
+                                                        </div>
+                                                    </a>
+                                                </div>
+                                                <div class="col-6 text-center">
+                                                    @attachment.FileVersion
+                                                </div>
+                                                <div class="col-6 text-center">
+                                                    @attachment.FileDate.ToShortDateString()
+                                                </div>
+                                                <div class="col-12 text-center">
+                                                    @attachment.Name
+                                                </div>
+                                            </div>
+                                            <hr />
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+    <div class="inner scroll-magic" id="contact-us">
+        <div class="row">
+            <div class="col-12">
+                <h3 class="contact-us-title">Контакты</h3>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col-sm-12">
+                @*<script type="text/javascript" charset="utf-8" async
+                    src="https://api-maps.yandex.ru/services/constructor/1.0/js/?um=constructor%3Ad9cf01a08f28c79ee97a0b70e7614ce72eb728c8fffa1c0e30b097159e57c6da&amp;width=auto&amp;height=400&amp;lang=ru_RU&amp;scroll=false"></script>*@
+                <script type="text/javascript" charset="utf-8" async src="@commonSettings.MapSource"></script>
+
+                <div class="row mt-1 text-center buttons-mobile">
+                    <div class="col">
+                        <a class="btn-floating blue accent-1">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </a>
+                        <p>@commonSettings.Address</p>
+                    </div>
+                    <div class="col">
+                        <a class="btn-floating blue accent-1" href="tel:@commonSettings.PhoneNumber">
+                            <i class="fas fa-phone"></i>
+                        </a>
+                        <p>@commonSettings.PhoneNumber</p>
+                    </div>
+                    <div class="col">
+                        <a class="btn-floating blue accent-1" href="mailto:@commonSettings.Email">
+                            <i class="fas fa-envelope"></i>
+                        </a>
+                        <p>@commonSettings.Email</p>
+                    </div>
+
+                    <div class="col">
+                        <a class="btn-floating blue accent-1" href="mailto:@commonSettings.Email">
+                            <i class="fas fa-headset"></i>
+                        </a>
+                        <p>
+                            Техническая поддержка:
+                        </p>
+                        <div class="text-sm-left text-md-center text-lg-center text-xl-center">
+                            <p>
+                                <a href="mailto:support@integral-group.pro" class="text-dark">support@integral-group.pro</a>
+                            </p>
+
+                            <p class="d-block">
+                                <a href="tel:89251071797" class="text-dark">8 (925) 107-17-87</a>
+                            </p>
+
+                            <p>
+                                <a href="https://wa.me/89251071787">
+                                    <i class="fab fa-whatsapp fa-lg"></i>
+                                </a>
+                                <a href="https://t.me/Integral_Ltd">
+                                    <i class="fab fa-telegram-plane ml-2 fa-lg"></i>
+                                </a>
+                                <a href="https://www.instagram.com/integralgroup.pro/" target="_blank">
+                                    <i class="fab fa-instagram ml-2 fa-lg"></i>
+                                </a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="inner scroll-magic" id="send-us-a-mail">
+        <div class="row">
+            <div class="col-12">
+                <h3 class="contact-us-title">Написать нам</h3>
+            </div>
+        </div>
+        <div class="row mt-5">
+            <div class="col-sm-12">
+                @{
+                    await Html.RenderPartialAsync("ContactUsPartial", new SendContactUsNotificationCommand());
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer class="page-footer font-small unique-color-dark">
+    <div class="container text-center text-md-left pt-3">
+        <div class="row mt-3 smooth-scroll">
+            <div class="col-md-3 col-lg-4 col-xl-3 mx-auto mt-3 mb-1">
+                <h6 class="text-uppercase font-weight-bold">Интеграл</h6>
+                <hr class="deep-purple accent-2 mb-1 mt-0 d-inline-block mx-auto" style="width: 60px;">
+                <p>Навигационные решения для любых задач</p>
+            </div>
+            <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mb-1">
+                <h6 class="text-uppercase font-weight-bold">Продукты</h6>
+                <hr class="deep-purple accent-2 mb-2 mt-0 d-inline-block mx-auto" style="width: 60px;">
+                <div class="desktop-view">
+                    @for (var i = 0; i < Model.Products.Count; i++)
+                    {
+                        var product = Model.Products[i];
+                        <p><a href="#@product.UIID">@product.Name</a></p>
+                    }
+                </div>
+                <div class="mobile-view">
+                    @for (var i = 0; i < Model.Products.Count; i++)
+                    {
+                        var product = Model.Products[i];
+                        <p><a href="#@product.MobileUIID">@product.Name</a></p>
+                    }
+                </div>
+            </div>
+
+            <div class="col-md-3 col-lg-2 col-xl-2 mx-auto mb-1">
+                <h6 class="text-uppercase font-weight-bold">Ссылки</h6>
+                <hr class="deep-purple accent-2 mb-2 mt-0 d-inline-block mx-auto" style="width: 60px;">
+                <p>
+                    <a asp-controller="Account" asp-action="@nameof(AccountController.Login)">Войти в уч.запись</a>
+                </p>
+                <p>
+                    <a href="#send-us-a-mail">Обратная связь</a>
+                </p>
+                <p>
+                    <a href="https://www.instagram.com/integralgroup.pro/" target="_blank">Наш Instagram</a>
+                </p>
+            </div>
+
+            <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mb-md-0 mb-1">
+                <h6 class="text-uppercase font-weight-bold">Контакты</h6>
+                <hr class="deep-purple accent-2 mb-2 mt-0 d-inline-block mx-auto" style="width: 60px;">
+                <p>
+                    <i class="fas fa-home mr-3"></i>@commonSettings.Address
+                </p>
+                <p>
+                    <i class="fas fa-envelope mr-3"></i>@commonSettings.Email
+                </p>
+                <p>
+                    <i class="fas fa-phone mr-3"></i>@commonSettings.PhoneNumber
+                </p>
+                <!--
+                <p>
+                    <i class="fas fa-print mr-3"></i>@commonSettings.PhoneNumber
+                </p>
+                -->
+                <p>
+                    <i class="fas fa-phone mr-3"></i>
+                    <a href="tel:89251071797">8 (925) 107-17-87</a>
+                    <a href="https://wa.me/89251071787">
+                        <i class="fab fa-whatsapp ml-2 fa-lg"></i>
+                    </a>
+                    <a href="https://t.me/Integral_Ltd">
+                        <i class="fab fa-telegram-plane ml-2 fa-lg"></i>
+                    </a>
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="footer-copyright text-center py-3">© ООО "Интеграл", все права защищены</div>
+</footer>
+
+@section Scripts {
+
+<script>
+        $(function () {
+            $.scrollify({
+                section: ".scroll-magic:visible",
+                interstitialSection: "footer",
+                scrollbars: true,
+                //standardScrollElements: ".overflow-scroll:active",
+            });
+
+            $(".carousel").carousel({
+                interval: false,
+                touch: true
+            });
+
+            $("#back-to-top").click(function () {
+                $("html, body").animate({ scrollTop: 0 }, 600);
+                return false;
+            });
+
+            $(".mdb-lightbox-ui").load("/assets/lib/mdb-pro/mdb-addons/mdb-lightbox-ui.html");
+        });
+</script>
+}

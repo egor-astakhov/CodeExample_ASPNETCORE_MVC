@@ -1,0 +1,122 @@
+﻿@using Integral.Application.Common.Persistence
+@using Integral.Application.Common.Persistence.Entities
+@using Microsoft.EntityFrameworkCore
+
+@inject IDeferredDbContext DbContext
+
+@{
+    ViewData["Title"] = "Несохраненные изменения";
+    ViewBag.ActivePage = nameof(AdminController.DeferredChanges);
+}
+
+<div class="d-flex p-2 justify-content-center">
+    <h2 class="h2-responsive d-flex">Несохраненные изменения</h2>
+</div>
+<div class="row">
+    <div class="col">
+        <p class="text-center text-black-50">
+            <small>Отменить или сохранить внесенные изменения</small>
+        </p>
+    </div>
+</div>
+
+<div class="my-3 d-flex justify-content-center">
+    <form asp-action="@nameof(AdminController.DiscardDeferredChanges)">
+        <button type="submit" class="btn btn-white btn-rounded mr-md-3 z-depth-1a text-lowercase">
+            <i class="fas fa-times red-text"></i>
+        </button>
+    </form>
+
+    <form asp-action="@nameof(AdminController.PersistDeferredChanges)">
+        <button type="submit" class="btn btn-white btn-rounded mr-md-3 z-depth-1a text-lowercase">
+            <i class="fas fa-check green-text"></i>
+        </button>
+    </form>
+</div>
+
+<div class="row">
+    <div class="col">
+        <p class="text-center text-black-50">
+            <small>Список изменений</small>
+        </p>
+    </div>
+</div>
+
+<div>
+    @for (var i = 0; i < DbContext.DeferredChanges.Count; i++)
+    {
+        var change = DbContext.DeferredChanges.ElementAt(i);
+
+        <div class="mt-4">
+            @for (var j = 0; j < change.Entries.Count(); j++)
+            {
+                var entry = change.Entries.ElementAt(j);
+                var diffId = $"diff_{i}_{j}";
+
+                <div>
+                    <button type="button" class="btn btn-rounded waves-effect @GetButtonClass(entry)"
+                            data-toggle="collapse" data-target="#@diffId">
+                        @GetEntityName(entry)
+                    </button>
+
+                    <div id="@diffId" class="collapse">
+                        <div class="card card-body">
+                            @for (var k = 0; k < entry.ModifiedProperties.Count; k++)
+                            {
+                                if (k > 0)
+                                {
+                                    <hr />
+                                }
+
+                                var (original, current) = entry.ModifiedProperties.ElementAt(k);
+
+                                <div class="row">
+                                    @if (original == null)
+                                    {
+                                        <div class="col current-settings">@current</div>
+                                    }
+                                    else if (current == null)
+                                    {
+                                        <div class="col previous-settings">@original</div>
+                                    }
+                                    else
+                                    {
+                                        <div class="col-6 previous-settings">@original</div>
+                                        <div class="col-6 current-settings">@current</div>
+                                    }
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>
+
+@functions {
+
+    private string GetEntityName(DeferredChangeEntry entry)
+    {
+        return entry.Entity.GetType().Name switch
+        {
+            nameof(ApplicationSetting) => "Настройки приложения",
+            nameof(Product) => "Продукт",
+            nameof(ProductSpecification) => "Технические характеристики",
+            nameof(ProductAttachment) => "Материалы для скачивания",
+            _ => ""
+        };
+    }
+
+    private string GetButtonClass(DeferredChangeEntry entry)
+    {
+        return entry.State switch
+        {
+            EntityState.Added => "btn-outline-success",
+            EntityState.Modified => "btn-outline-warning",
+            EntityState.Deleted => "btn-outline-danger",
+            _ => "btn-outline-info"
+        };
+    }
+
+}

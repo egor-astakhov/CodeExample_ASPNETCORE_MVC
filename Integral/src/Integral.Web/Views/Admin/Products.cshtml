@@ -1,0 +1,72 @@
+﻿@using Integral.Application.Products.Data
+@model ProductListViewModel
+
+@{
+    ViewData["Title"] = "Редактирование продуктов";
+    ViewBag.ActivePage = nameof(AdminController.Products);
+}
+
+<div class="container-fluid">
+    <div class="d-flex p-2 justify-content-center">
+        <h2 class="h2-responsive d-flex">Продукты</h2>
+    </div>
+
+    <div class="row my-3 justify-content-center">
+        <a asp-controller="Admin" asp-action="@nameof(AdminController.EditProduct)" 
+           class="btn btn-white btn-rounded mr-md-3 z-depth-1a"><i class="fas fa-plus green-text"></i></a>
+    </div>
+
+    <div class="row row-cols-4 mt-3 p-2 justify-content-around justify-content-md-around">
+        @foreach (var product in Model.Items)
+        {
+            var confirmDeleteModalId = $"confirm-delete-modal-{product.Id}";
+
+            <div class="col-auto mb-4">
+                <div class="card card-cascade card-h-unset narrower">
+                    <div class="view view-cascade gradient-card-header purple-gradient">
+                        <span class="badge badge-info float-right">@product.SortingOrder</span>
+                        <h2 class="card-header-title">@product.Name</h2>
+                        <hr />
+                        <h5 class="mb-0 pb-3 pt-2"><small>@product.ShortDescription</small></h5>
+                        <div class="row mt-2">
+                            <div class="col text-center">
+                                <a asp-controller="Admin" asp-action="@nameof(AdminController.EditProduct)" asp-route-id="@product.Id"
+                                   class="btn btn-white btn-rounded z-depth-1a"><i class="far fa-edit orange-text"></i></a>
+                            </div>
+                            <div class="col text-center">
+                                <button type="button" class="btn btn-white btn-rounded z-depth-1a"
+                                        data-toggle="modal" data-target="#@confirmDeleteModalId">
+                                    <i class="fas fa-times red-text"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="modal fade" id="@confirmDeleteModalId" tabindex="-1" role="dialog"
+                             aria-hidden="true" data-backdrop="static">
+                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header text-dark">
+                                        <h5 class="modal-title">Необходимо подтверждение</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body text-dark">
+                                        Вы уверены, что хотите удалить продукт @product.Name?
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Нет</button>
+                                        <form asp-route-id="@product.Id" asp-action="@nameof(AdminController.DeleteProduct)" method="post">
+                                            <button type="submit" class="btn btn-primary">Да</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body card-body-cascade text-center">
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

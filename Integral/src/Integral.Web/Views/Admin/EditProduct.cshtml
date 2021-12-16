@@ -1,0 +1,303 @@
+﻿@using Integral.Application.Products.Data
+@model EditProductViewModel
+
+@{
+    ViewData["Title"] = "Редактирование продукта";
+    ViewBag.ActivePage = nameof(AdminController.Products);
+
+    if (!Model.Specifications.Any())
+    {
+        Model.Specifications.Add(new EditProductViewModel.Specification());
+    }
+
+    if (!Model.Attachments.Any())
+    {
+        Model.Attachments.Add(new EditProductViewModel.Attachment());
+    }
+}
+
+<form method="post" enctype="multipart/form-data">
+    <input type="hidden" asp-for="Id" />
+
+    <div class="container-fluid">
+        <div class="d-flex p-2 justify-content-center">
+            <h2 class="h2-responsive d-flex">Редактирование продукта</h2>
+        </div>
+
+        <div class="row my-3 d-flex justify-content-start">
+            <a asp-controller="Admin" asp-action="@nameof(AdminController.Products)" type="button" class="btn btn-white btn-rounded mr-md-3 z-depth-1a"><i class="fas fa-reply blue-text"></i></a>
+        </div>
+
+        <div class="row p-2 justify-content-center">
+            <div class="col-12">
+                <div class="accordion md-accordion accordion-2" id="editProductAccordion" role="tablist"
+                     aria-multiselectable="true">
+
+                    <div class="card card-h-unset">
+                        <a data-toggle="collapse" data-parent="#editProductAccordion" href="#editCommon" aria-expanded="true"
+                           aria-controls="editCommon">
+                            <div class="card-header z-depth-1 mb-1" role="tab" id="editCommonCard">
+                                <h5 class="mb-0 font-thin black-text">
+                                    Основное <i class="fas fa-angle-down rotate-icon"></i>
+                                </h5>
+                            </div>
+                        </a>
+                        <div id="editCommon" class="collapse show" role="tabpanel" data-parent="#editProductAccordion">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-1">
+                                        <div class="md-form form-sm">
+                                            <input asp-for="SortingOrder" class="form-control">
+                                            <label asp-for="SortingOrder">Позиция</label>
+                                            <span asp-validation-for="SortingOrder" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="md-form form-sm">
+                                            <input asp-for="Name" class="form-control">
+                                            <label asp-for="Name">Название</label>
+                                            <span asp-validation-for="Name" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="md-form form-sm">
+                                            <input asp-for="ShortDescription" class="form-control">
+                                            <label asp-for="ShortDescription">Краткое описание</label>
+                                            <span asp-validation-for="ShortDescription" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="md-form">
+                                            <div class="file-field">
+                                                <div class="btn btn-white btn-rounded mr-md-3 z-depth-1a btn-sm float-left">
+                                                    <i class="fas fa-cloud-upload-alt blue-text"></i>
+                                                    <input asp-for="ImageFile" accept="image/*">
+                                                </div>
+                                                <div class="file-path-wrapper">
+                                                    <input asp-for="ImageName" class="file-path"
+                                                           readonly="readonly" placeholder="Выбрать изображение">
+                                                </div>
+                                                <span asp-validation-for="ImageName" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card card-h-unset">
+                        <a class="collapsed" data-toggle="collapse" data-parent="#editProductAccordion" href="#editDescription"
+                           aria-expanded="false" aria-controls="collapse2">
+                            <div class="card-header z-depth-1 mb-1" role="tab" id="editDescriptionCard">
+                                <h5 class="mb-0 font-thin black-text">
+                                    Описание<i class="fas fa-angle-down rotate-icon"></i>
+                                </h5>
+                            </div>
+                        </a>
+                        <div id="editDescription" class="collapse" role="tabpanel" data-parent="#editProductAccordion">
+                            <div class="card-body mb-1">
+                                <div class="md-form form-sm">
+                                    <textarea asp-for="Description" class="md-textarea form-control" rows="10"></textarea>
+                                    <label asp-for="Description">Введите описание продукта</label>
+                                    <span asp-validation-for="Description" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card card-h-unset">
+                        <a class="collapsed" data-toggle="collapse" data-parent="#editProductAccordion" href="#editApplication"
+                           aria-expanded="false" aria-controls="editApplication">
+                            <div class="card-header z-depth-1 mb-1" role="tab" id="editApplicationCard">
+                                <h5 class="mb-0 font-thin black-text">
+                                    Область применения<i class="fas fa-angle-down rotate-icon"></i>
+                                </h5>
+                            </div>
+                        </a>
+                        <div id="editApplication" class="collapse" role="tabpanel"
+                             data-parent="#editProductAccordion">
+                            <div class="card-body mb-1">
+                                <div class="md-form form-sm">
+                                    <textarea asp-for="ApplicationArea" class="md-textarea form-control" rows="10"></textarea>
+                                    <label asp-for="ApplicationArea">Введите элементы cписка через Enter</label>
+                                    <span asp-validation-for="ApplicationArea" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card card-h-unset">
+                        <a class="collapsed" data-toggle="collapse" data-parent="#editProductAccordion" href="#editFeatures"
+                           aria-expanded="false" aria-controls="editFeatures">
+                            <div class="card-header z-depth-1 mb-1" role="tab" id="editFeaturesCard">
+                                <h5 class="mb-0 font-thin black-text">
+                                    Особенности<i class="fas fa-angle-down rotate-icon"></i>
+                                </h5>
+                            </div>
+                        </a>
+                        <div id="editFeatures" class="collapse" role="tabpanel" data-parent="#editProductAccordion">
+                            <div class="card-body mb-1">
+                                <div class="md-form form-sm">
+                                    <textarea asp-for="Features" class="md-textarea form-control" rows="10"></textarea>
+                                    <label asp-for="Features">Введите элементы cписка через Enter</label>
+                                    <span asp-validation-for="Features" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card card-h-unset">
+                        <a class="collapsed" data-toggle="collapse" data-parent="#editProductAccordion" href="#editSpecifications"
+                           aria-expanded="false" aria-controls="editSpecifications">
+                            <div class="card-header z-depth-1 mb-1" role="tab" id="editSpecificationsCard">
+                                <h5 class="mb-0 font-thin black-text">
+                                    Технические характеристики<i class="fas fa-angle-down rotate-icon"></i>
+                                </h5>
+                            </div>
+                        </a>
+                        <div id="editSpecifications" class="collapse" role="tabpanel"
+                             data-parent="#editProductAccordion">
+                            <div class="card-body mb-1">
+                                <div id="editSpecificationsContainer" class="dynamic-row-container" data-allow-empty="false">
+                                    @for (var i = 0; i < Model.Specifications.Count; i++)
+                                    {
+                                        <div class="row dynamic-row">
+                                            <input type="hidden" asp-for="Specifications[i].Id" />
+                                            <div class="col-5">
+                                                <div class="md-form form-sm">
+                                                    <input asp-for="Specifications[i].Name" class="form-control">
+                                                    <label asp-for="Specifications[i].Name">Параметр</label>
+                                                    <span asp-validation-for="Specifications[i].Name" class="text-danger"></span>
+                                                </div>
+                                            </div>
+                                            <div class="col-5">
+                                                <div class="md-form form-sm">
+                                                    <input asp-for="Specifications[i].Value" class="form-control">
+                                                    <label asp-for="Specifications[i].Value">Значение</label>
+                                                    <span asp-validation-for="Specifications[i].Value" class="text-danger"></span>
+                                                </div>
+                                            </div>
+                                            <div class="col">
+                                                <div class="md-form form-sm d-flex justify-content-end">
+                                                    <button type="button" class="btn btn-white btn-rounded z-depth-1a dynamic-row-delete">
+                                                        <i class="fas fa-times red-text"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+                                <div class="row my-3 d-flex justify-content-center">
+                                    <button type="button" class="btn btn-white btn-rounded mr-md-3 z-depth-1a dynamic-row-add"
+                                            data-target="editSpecificationsContainer">
+                                        <i class="fas fa-plus green-text"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card card-h-unset">
+                        <a class="collapsed" data-toggle="collapse" data-parent="#editProductAccordion" href="#editAttachments"
+                           aria-expanded="false" aria-controls="editAttachments">
+                            <div class="card-header z-depth-1 mb-1" role="tab" id="editAttachmentsCard">
+                                <h5 class="mb-0 font-thin black-text">
+                                    Материалы для скачивания<i class="fas fa-angle-down rotate-icon"></i>
+                                </h5>
+                            </div>
+                        </a>
+                        <div id="editAttachments" class="collapse" role="tabpanel"
+                             data-parent="#editProductAccordion">
+                            <div class="card-body mb-1">
+                                <div id="editAttachmentsContainer" class="dynamic-row-container" data-allow-empty="false">
+                                    @for (var i = 0; i < Model.Attachments.Count; i++)
+                                    {
+                                        <div class="row dynamic-row">
+                                            <input type="hidden" asp-for="Attachments[i].Id" />
+                                            <div class="col-3">
+                                                <div class="md-form form-sm">
+                                                    <input asp-for="Attachments[i].Name" class="form-control">
+                                                    <label asp-for="Attachments[i].Name">Название</label>
+                                                    <span asp-validation-for="Attachments[i].Name" class="text-danger"></span>
+                                                </div>
+                                            </div>
+                                            <div class="col-1">
+                                                <div class="md-form form-sm">
+                                                    <input asp-for="Attachments[i].FileVersion" class="form-control">
+                                                    <label asp-for="Attachments[i].FileVersion">Версия</label>
+                                                    <span asp-validation-for="Attachments[i].FileVersion" class="text-danger"></span>
+                                                </div>
+                                            </div>
+                                            <div class="col-2">
+                                                <div class="md-form form-sm">
+                                                    <input type="text" class="form-control datepicker"
+                                                           asp-for="Attachments[i].FileDate" asp-format="{0:d}">
+                                                    <label asp-for="Attachments[i].FileDate">Дата</label>
+                                                    <span asp-validation-for="Attachments[i].FileDate" class="text-danger"></span>
+                                                </div>
+                                            </div>
+                                            <div class="col-4">
+                                                <div class="md-form">
+                                                    <div class="file-field">
+                                                        <div class="btn btn-white btn-rounded mr-md-3 z-depth-1a btn-sm float-left">
+                                                            <i class="fas fa-cloud-upload-alt blue-text"></i>
+                                                            <input asp-for="Attachments[i].File">
+                                                        </div>
+                                                        <div class="file-path-wrapper">
+                                                            <input asp-for="Attachments[i].FileName" class="file-path"
+                                                                   readonly="readonly" placeholder="Выберите файл" />
+                                                        </div>
+                                                        <span asp-validation-for="Attachments[i].FileName" class="text-danger"></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col">
+                                                <div class="md-form form-sm d-flex justify-content-end">
+                                                    <button type="button" class="btn btn-white btn-rounded z-depth-1a dynamic-row-delete">
+                                                        <i class="fas fa-times red-text"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+                                <div class="row my-3 d-flex justify-content-center">
+                                    <button type="button" class="btn btn-white btn-rounded mr-md-3 z-depth-1a dynamic-row-add"
+                                            data-target="editAttachmentsContainer">
+                                        <i class="fas fa-plus green-text"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr />
+        <div class="row my-3 d-flex justify-content-center">
+            <button id="editProductSubmit" type="submit" class="btn btn-white btn-rounded mr-md-3 z-depth-1a">
+                <i class="fas fa-check green-text"></i>
+            </button>
+        </div>
+    </div>
+</form>
+
+@section Scripts{
+    <script>
+        $.validator.setDefaults({
+            ignore: ""
+        });
+        $(function () {
+            $("#editProductSubmit").click(function (e) {
+                let isFormValid = $(this).closest("form").validate().form();
+                if (!isFormValid) {
+                    e.preventDefault();
+                    let hasErrorsInOpenCard = $(".collapse.show .field-validation-error").length > 0;
+                    if (hasErrorsInOpenCard) return;
+                    $(".field-validation-error").first().closest(".collapse").collapse("show");
+                }
+            });
+        });
+    </script>
+}

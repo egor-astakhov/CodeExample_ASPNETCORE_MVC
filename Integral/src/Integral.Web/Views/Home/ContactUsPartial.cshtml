@@ -1,0 +1,40 @@
+﻿@using Integral.Application.Notifications.Commands.SendContactUsNotification
+@model SendContactUsNotificationCommand
+
+<form asp-controller="Home" asp-action="@nameof(HomeController.ContactUs)" method="post">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="md-form mb-0">
+                <input asp-for="Name" class="form-control">
+                <label asp-for="Name">Ваше имя</label>
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="md-form mb-0">
+                <input asp-for="Email" class="form-control">
+                <label asp-for="Email">Ваш e-mail</label>
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="md-form mb-0">
+                <input asp-for="Subject" class="form-control">
+                <label asp-for="Subject">Тема</label>
+                <span asp-validation-for="Subject" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="md-form">
+                <textarea asp-for="Message" rows="2" class="form-control md-textarea"></textarea>
+                <label asp-for="Message">Сообщение</label>
+                <span asp-validation-for="Message" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+    <button type="submit" class="btn btn-primary">Отправить</button>
+</form>

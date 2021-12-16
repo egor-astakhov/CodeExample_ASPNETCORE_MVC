@@ -1,0 +1,58 @@
+﻿@model CommonSettingsViewModel
+@{
+    ViewData["Title"] = "Общие настройки";
+    ViewBag.ActivePage = nameof(AdminController.CommonSettings);
+}
+
+<form method="post">
+    <div class="container-fluid">
+        <div class="d-flex p-2 justify-content-center">
+            <h2 class="h2-responsive d-flex">Общие настройки</h2>
+        </div>
+
+        <div class="row justify-content-center">
+            <div class="col-8 col-sm-10 col-md-8 col-lg-8 col-xl-8">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="md-form">
+                            <input asp-for="Address" class="form-control">
+                            <label asp-for="Address">Адрес</label>
+                            <span asp-validation-for="Address" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="md-form">
+                            <input asp-for="MapSource" class="form-control">
+                            <label asp-for="MapSource">Геопозиция на карте (содержимое src из конструктора карт Яндекс)</label>
+                            <span asp-validation-for="MapSource" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="md-form">
+                            <input asp-for="PhoneNumber" class="form-control">
+                            <label asp-for="PhoneNumber">Номер телефона</label>
+                            <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="md-form">
+                            <input asp-for="Email" class="form-control">
+                            <label asp-for="Email">Почта</label>
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row my-3 d-flex justify-content-center">
+            <button type="submit" class="btn btn-white btn-rounded mr-md-3 z-depth-1a"><i class="fas fa-check green-text"></i></button>
+        </div>
+    </div>
+</form>

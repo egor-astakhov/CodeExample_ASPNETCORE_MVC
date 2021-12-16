@@ -1,0 +1,70 @@
+﻿@model LandingCarouselSettingsViewModel
+@{
+    ViewData["Title"] = "Редактирование слайдера";
+    ViewBag.ActivePage = nameof(AdminController.LandingCarousel);
+
+    if (!Model.Items.Any())
+    {
+        Model.Items.Add(new LandingCarouselSettingsViewModel.Item());
+    }
+}
+
+<form method="post" enctype="multipart/form-data">
+    <input type="hidden" asp-for="Id" />
+    <div class="container-fluid">
+        <div class="d-flex p-2 justify-content-center">
+            <h2 class="h2-responsive d-flex">Настройки слайдера</h2>
+        </div>
+        <div class="row">
+            <div class="col">
+                <p class="text-center text-black-50">
+                    <small>Размер загружаемого файла не более 10мб.</small>
+                </p>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-10">
+                <div id="landingCarouselSettings" class="dynamic-row-container">
+                    @for (var i = 0; i < Model.Items.Count; i++)
+                    {
+                        <div class="row dynamic-row">
+                            <div class="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                                <div class="md-form">
+                                    <div class="file-field">
+                                        <div class="btn btn-white btn-rounded mr-md-3 z-depth-1a btn-sm justify-content-start">
+                                            <i class="fas fa-cloud-upload-alt blue-text"></i>
+                                            <input asp-for="Items[i].File" accept="video/*">
+                                        </div>
+                                        <div class="file-path-wrapper">
+                                            <input asp-for="Items[i].DisplayName" class="file-path"
+                                                   readonly="readonly" placeholder="Выбрать видеофайл">
+                                        </div>
+                                        <span asp-validation-for="Items[i].DisplayName" class="text-danger"></span>
+                                        <input type="hidden" asp-for="Items[i].Path" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-12 col-md-7 col-lg-7 col-xl-7">
+                                <div class="md-form">
+                                    <input asp-for="Items[i].Text" class="form-control" />
+                                    <label asp-for="Items[i].Text">Подпись слайда</label>
+                                    <span asp-validation-for="Items[i].Text" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-12 col-md-1 col-lg-1 col-xl-1 text-center">
+                                <button type="button" class="btn btn-white btn-rounded mr-md-3 z-depth-1a dynamic-row-delete"><i class="fas fa-times red-text"></i></button>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="row my-3 d-flex justify-content-center">
+            <button type="button" class="btn btn-white btn-rounded mr-md-3 z-depth-1a dynamic-row-add"
+                    data-target="landingCarouselSettings">
+                <i class="fas fa-plus green-text"></i>
+            </button>
+            <button type="submit" class="btn btn-white btn-rounded mr-md-3 z-depth-1a"><i class="fas fa-check green-text"></i></button>
+        </div>
+    </div>
+</form>

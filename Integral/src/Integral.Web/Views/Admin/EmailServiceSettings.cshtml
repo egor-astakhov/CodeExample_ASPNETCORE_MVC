@@ -1,0 +1,76 @@
+﻿@model EmailServiceSettingsViewModel
+@{
+    ViewData["Title"] = "Редактор настроек почты";
+    ViewBag.ActivePage = nameof(AdminController.EmailServiceSettings);
+}
+
+<form method="post">
+    <div class="container-fluid">
+        <div class="d-flex p-2 justify-content-center">
+            <h2 class="h2-responsive d-flex">Настройки почты</h2>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-10 col-sm-10 col-md-8 col-lg-6 col-xl-6">
+                <div class="row">
+                    <div class="col">
+                        <p class="text-center text-black-50">
+                            <small>Настройки почты noreply, от которой приходят заявки с сайта.</small>
+                        </p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-9">
+                        <div class="md-form">
+                            <input asp-for="Host" class="form-control">
+                            <label asp-for="Host">Хост (например smtp.yandex.ru)</label>
+                            <span asp-validation-for="Host" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="md-form">
+                            <select asp-for="Port" asp-items="new SelectList(EmailServiceSettingsViewModel.SupportedPorts)"
+                                    class="mdb-select md-form"></select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="md-form">
+                            <input asp-for="Username" class="form-control">
+                            <label asp-for="Username">Логин</label>
+                            <span asp-validation-for="Username" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="md-form">
+                            <input asp-for="Password" type="password" class="form-control">
+                            <label asp-for="Password">Пароль</label>
+                            <span asp-validation-for="Password" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-5">
+                    <div class="col">
+                        <p class="text-center text-black-50">
+                            <small>Aдрес почты для входящих заявок с сайта.</small>
+                        </p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="md-form">
+                            <input asp-for="SupportEmail" class="form-control">
+                            <label asp-for="SupportEmail">Почта</label>
+                            <span asp-validation-for="SupportEmail" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row my-3 d-flex justify-content-center">
+            <button type="submit" class="btn btn-white btn-rounded mr-md-3 z-depth-1a"><i class="fas fa-check green-text"></i></button>
+        </div>
+    </div>
+</form>

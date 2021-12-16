@@ -1,0 +1,88 @@
+﻿@using Integral.Application.Storage.Commands
+@using Integral.Application.Storage.Data
+@using Integral.Application.Common.Persistence
+@using System.Linq
+
+@model BackupViewModel
+
+@inject IDeferredDbContext DbContext
+
+@{
+    ViewData["Title"] = "Резервное копирование";
+    ViewBag.ActivePage = nameof(AdminController.Backups);
+}
+
+<div class="container-fluid">
+    <div class="d-flex p-2 justify-content-center">
+        <h2 class="h2-responsive d-flex">Резервное копирование</h2>
+    </div>
+
+    <div class="d-flex justify-content-center">
+        <div class="col-10">
+            <div class="row">
+                <div class="col">
+                    <p class="text-center text-black-50">
+                        <small>Сохранить текущий сайт</small>
+                    </p>
+                </div>
+            </div>
+            <div class="d-flex justify-content-center">
+                @if (DbContext.DeferredChanges.Any())
+                {
+                    <small class="red-text">Резервное копирование недоступно, необходимо сохранить изменения</small>
+                }
+                else
+                {
+                    <form asp-action="@nameof(AdminController.CreateBackup)">
+                        <button type="submit" class="btn btn-white btn-rounded mr-md-3 z-depth-1a">
+                            <i class="far fa-hdd"></i>
+                        </button>
+                    </form>
+                }
+            </div>
+
+
+            <div class="row">
+                <div class="col">
+                    <p class="my-3 text-center text-black-50">
+                        <small>Ссылки на скачивание:</small>
+                    </p>
+                </div>
+            </div>
+
+            <ul class="list-group list-group-flush text-center">
+                @foreach (var backup in Model.Items.Reverse())
+                {
+                    <li class="list-group-item">
+                        Резервная копия от @backup.CreationTime
+                        <a asp-action="@nameof(AdminController.GetBackup)" asp-route-name="@backup.Name"
+                           class="btn btn-white btn-sm btn-rounded mr-md-3 z-depth-1a blue-text">
+                            <i class="fas fa-cloud-download-alt"></i>
+                        </a>
+                        <form class="d-inline-block" asp-action="@nameof(AdminController.DeleteBackup)" asp-route-name="@backup.Name">
+                            <button type="submit" class="btn btn-white btn-sm btn-rounded mr-md-3 z-depth-1a red-text">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </form>
+                    </li>
+                }
+            </ul>
+
+            <div class="d-flex p-2 mt-5 justify-content-center">
+                <h2 class="h2-responsive d-flex">Восстановление</h2>
+            </div>
+
+            @if (DbContext.DeferredChanges.Any())
+            {
+                <div class="d-flex justify-content-center">
+                    <small class="red-text">Восстановление недоступно, необходимо сохранить изменения</small>
+                </div>
+            }
+            else
+            {
+                await Html.RenderPartialAsync("RecoveryPartial", new ApplyBackupCommand());
+            }
+        </div>
+    </div>
+</div>
+
